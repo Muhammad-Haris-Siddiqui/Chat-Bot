@@ -1,0 +1,30 @@
+import axios from "axios";
+import { useState } from "react";
+
+interface Message {
+  text: string;
+  sender: "user" | "bot";
+}
+
+const useChatbot = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  const sendMessage = async (message: string) => {
+    const newMessages: Message[] = [...messages, { text: message, sender: "user" }];
+    setMessages(newMessages);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/chat", {
+        message,
+      });
+      const botMessage = response.data.reply;
+      setMessages([...newMessages, { text: botMessage, sender: "bot" }]);
+    } catch (error) {
+      console.error("Error fetching AI response:", error);
+    }
+  };
+
+  return { messages, sendMessage };
+};
+
+export default useChatbot;

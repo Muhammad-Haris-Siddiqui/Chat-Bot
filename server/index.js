@@ -19,18 +19,20 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
       {
         contents: [
           {
-            role: "user",
-            parts: [{ text: userMessage }],
+            parts: [
+              { text: userMessage },
+            ],
           },
         ],
       },
       {
         headers: {
           "Content-Type": "application/json",
+          "x-goog-api-key": process.env.GEMINI_API_KEY,
         },
       }
     );
